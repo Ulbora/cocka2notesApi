@@ -1,0 +1,24 @@
+mode: set
+github.com/Ulbora/cocka2notesApi/api.go:60.49,63.22 3 1
+github.com/Ulbora/cocka2notesApi/api.go:66.2,66.24 1 1
+github.com/Ulbora/cocka2notesApi/api.go:63.22,65.3 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:41.33,50.2 6 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:53.44,55.2 1 0
+github.com/Ulbora/cocka2notesApi/notesApi.go:57.106,58.20 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:61.2,63.37 3 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:69.2,70.16 2 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:76.2,76.12 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:58.20,60.3 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:63.37,66.3 2 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:66.8,68.3 1 0
+github.com/Ulbora/cocka2notesApi/notesApi.go:70.16,71.37 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:71.37,74.4 2 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:80.43,82.2 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:85.43,87.2 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:90.42,92.2 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:95.45,97.2 1 1
+github.com/Ulbora/cocka2notesApi/notesApi.go:100.50,102.2 1 0
+github.com/Ulbora/cocka2notesApi/user.go:29.47,34.16 5 1
+github.com/Ulbora/cocka2notesApi/user.go:43.2,44.13 2 1
+github.com/Ulbora/cocka2notesApi/user.go:34.16,39.15 5 1
+github.com/Ulbora/cocka2notesApi/user.go:39.15,41.4 1 0
