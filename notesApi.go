@@ -30,11 +30,18 @@ import (
 
 //NotesAPI NotesAPI
 type NotesAPI struct {
-	proxy   px.Proxy
-	log     *lg.Logger
-	restURL string
-	apiKey  string
-	headers *Headers
+	proxy                      px.Proxy
+	log                        *lg.Logger
+	restURL                    string
+	apiKey                     string
+	headers                    *Headers
+	CheckboxNote               CheckboxNote
+	Note                       Note
+	NoteList                   []Note
+	FailAddCheckboxNoteList    []CheckboxNoteItem
+	FailUpdateCheckboxNoteList []CheckboxNoteItem
+	FailAddNoteItemList        []NoteItem
+	FailUpdateNoteItemList     []NoteItem
 }
 
 //GetNew GetNew

@@ -82,12 +82,29 @@ type NoteUsers struct {
 
 //Note Note
 type Note struct {
-	ID         int64       `json:"id"`
-	Title      string      `json:"title"`
-	Type       string      `json:"type"`
-	OwnerEmail string      `json:"ownerEmail"`
-	NoteItems  interface{} `json:"noteItems"`
-	LastUsed   time.Time   `json:"lastUsed"`
+	ID         int64      `json:"id"`
+	Title      string     `json:"title"`
+	Type       string     `json:"type"`
+	OwnerEmail string     `json:"ownerEmail"`
+	NoteItems  []NoteItem `json:"noteItems"`
+	LastUsed   time.Time  `json:"lastUsed"`
+}
+
+//NoteItem NoteItem
+type NoteItem struct {
+	ID     int64  `json:"id"`
+	Text   string `json:"text"`
+	NoteID int64  `json:"noteId"`
+}
+
+//CheckboxNote CheckboxNote
+type CheckboxNote struct {
+	ID         int64              `json:"id"`
+	Title      string             `json:"title"`
+	Type       string             `json:"type"`
+	OwnerEmail string             `json:"ownerEmail"`
+	NoteItems  []CheckboxNoteItem `json:"noteItems"`
+	LastUsed   time.Time          `json:"lastUsed"`
 }
 
 //CheckboxNoteItem CheckboxNoteItem
@@ -98,13 +115,6 @@ type CheckboxNoteItem struct {
 	NoteID  int64  `json:"noteId"`
 }
 
-//NoteItem NoteItem
-type NoteItem struct {
-	ID     int64  `json:"id"`
-	Text   string `json:"text"`
-	NoteID int64  `json:"noteId"`
-}
-
 //API API
 type API interface {
 	AddUser(u *User) *Response
@@ -113,17 +123,17 @@ type API interface {
 	AddUserToNote(n *NoteUsers) *Response
 
 	AddNote(n *Note) *ResponseID
-	// UpdateNote(n *Note, headers *Headers) *Response
-	// GetNote(id int64, headers *Headers) *Note
-	// GetUsersNotes(email string, headers *Headers) *[]Note
-	// DeleteNote(id int64, ownerEmail string, headers *Headers) *Response
+	UpdateNote(n *Note) *Response
+	GetCheckboxNote(id int64) *CheckboxNote
+	GetNote(id int64) *Note
+	GetUsersNotes(email string) *[]Note
+	DeleteNote(id int64, ownerEmail string) *Response
 
-	// AddCheckboxItem(ni *CheckboxNoteItem, headers *Headers) *ResponseID
-	// UpdateCheckboxItem(ni *CheckboxNoteItem, headers *Headers) *Response
-	// DeleteCheckboxItem(id int64, headers *Headers) *Response
+	AddCheckboxItem(ni *CheckboxNoteItem) *ResponseID
+	UpdateCheckboxItem(ni *CheckboxNoteItem) *Response
+	DeleteCheckboxItem(id int64) *Response
 
-	// AddNoteItem(ni *NoteItem, headers *Headers) *ResponseID
-	// UpdateNoteItem(ni *NoteItem, headers *Headers) *Response
-	// DeleteNoteItem(id int64, headers *Headers) *Response
-
+	AddNoteItem(ni *NoteItem) *ResponseID
+	UpdateNoteItem(ni *NoteItem) *Response
+	DeleteNoteItem(id int64) *Response
 }

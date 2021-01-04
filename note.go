@@ -2,6 +2,7 @@ package cocka2notesapi
 
 import (
 	"encoding/json"
+	"strconv"
 )
 
 /*
@@ -41,5 +42,97 @@ func (a *NotesAPI) AddNote(n *Note) *ResponseID {
 		}
 	}
 	a.log.Debug("rtn: ", rtn)
+	return &rtn
+}
+
+//UpdateNote UpdateNote
+func (a *NotesAPI) UpdateNote(n *Note) *Response {
+	var rtn Response
+	var url = a.restURL + "/rs/note/update"
+	a.log.Debug("url: ", url)
+	aJSON, err := json.Marshal(n)
+	if err == nil {
+		reqspu := a.buildRequest(put, url, a.headers, aJSON)
+		spusuc, stat := a.proxy.Do(reqspu, &rtn)
+		a.log.Debug("suc: ", spusuc)
+		a.log.Debug("stat: ", stat)
+		if !spusuc {
+			rtn.Code = int64(stat)
+		}
+	}
+	a.log.Debug("rtn: ", rtn)
+	return &rtn
+}
+
+//GetCheckboxNote GetCheckboxNote
+func (a *NotesAPI) GetCheckboxNote(id int64) *CheckboxNote {
+	var rtn CheckboxNote
+	idStr := strconv.FormatInt(id, 10)
+	var url = a.restURL + "/rs/note/get/" + idStr
+	a.log.Debug("url: ", url)
+
+	req := a.buildRequest(get, url, a.headers, nil)
+	suc, stat := a.proxy.Do(req, &rtn)
+	if suc && stat == 200 {
+		a.CheckboxNote = rtn
+	} else {
+		rtn = a.CheckboxNote
+	}
+	a.log.Debug("suc: ", suc)
+	a.log.Debug("stat: ", stat)
+
+	return &rtn
+}
+
+//GetNote GetNote
+func (a *NotesAPI) GetNote(id int64) *Note {
+	var rtn Note
+	idStr := strconv.FormatInt(id, 10)
+	var url = a.restURL + "/rs/note/get/" + idStr
+	a.log.Debug("url: ", url)
+
+	req := a.buildRequest(get, url, a.headers, nil)
+	suc, stat := a.proxy.Do(req, &rtn)
+	if suc && stat == 200 {
+		a.Note = rtn
+	} else {
+		rtn = a.Note
+	}
+	a.log.Debug("suc: ", suc)
+	a.log.Debug("stat: ", stat)
+
+	return &rtn
+}
+
+//GetUsersNotes GetUsersNotes
+func (a *NotesAPI) GetUsersNotes(email string) *[]Note {
+	var rtn []Note
+	var url = a.restURL + "/rs/note/get/all/" + email
+	a.log.Debug("url: ", url)
+
+	req := a.buildRequest(get, url, a.headers, nil)
+	suc, stat := a.proxy.Do(req, &rtn)
+	if suc && stat == 200 {
+		a.NoteList = rtn
+	} else {
+		rtn = a.NoteList
+	}
+	a.log.Debug("suc: ", suc)
+	a.log.Debug("stat: ", stat)
+
+	return &rtn
+}
+
+//DeleteNote DeleteNote
+func (a *NotesAPI) DeleteNote(id int64, ownerEmail string) *Response {
+	var rtn Response
+	idStr := strconv.FormatInt(id, 10)
+	var url = a.restURL + "/rs/note/delete/" + idStr + "/" + ownerEmail
+	a.log.Debug("url: ", url)
+
+	req := a.buildRequest(delete, url, a.headers, nil)
+	dspsuc, stat := a.proxy.Do(req, &rtn)
+	a.log.Debug("suc: ", dspsuc)
+	a.log.Debug("stat: ", stat)
 	return &rtn
 }
