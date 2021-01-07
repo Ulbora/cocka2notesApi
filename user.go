@@ -92,11 +92,7 @@ func (a *NotesAPI) GetNoteUserList(noteID int64, ownerEmail string) *[]string {
 
 	req := a.buildRequest(get, url, a.headers, nil)
 	suc, stat := a.proxy.Do(req, &rtn)
-	//if suc && stat == 200 {
-	//a.NoteList = rtn
-	//} else {
-	//rtn = a.NoteList
-	//}
+
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
 
