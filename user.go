@@ -2,6 +2,7 @@ package cocka2notesapi
 
 import (
 	"encoding/json"
+	"strconv"
 )
 
 /*
@@ -79,5 +80,25 @@ func (a *NotesAPI) AddUserToNote(n *NoteUsers) *Response {
 		}
 	}
 	a.log.Debug("rtn: ", rtn)
+	return &rtn
+}
+
+//GetNoteUserList GetNoteUserList
+func (a *NotesAPI) GetNoteUserList(noteID int64, ownerEmail string) *[]string {
+	var rtn []string
+	idStr := strconv.FormatInt(noteID, 10)
+	var url = a.restURL + "/rs/note/users/" + idStr + "/" + ownerEmail
+	a.log.Debug("url: ", url)
+
+	req := a.buildRequest(get, url, a.headers, nil)
+	suc, stat := a.proxy.Do(req, &rtn)
+	//if suc && stat == 200 {
+	//a.NoteList = rtn
+	//} else {
+	//rtn = a.NoteList
+	//}
+	a.log.Debug("suc: ", suc)
+	a.log.Debug("stat: ", stat)
+
 	return &rtn
 }

@@ -121,6 +121,7 @@ type API interface {
 	UpdateUser(u *User) *Response
 
 	AddUserToNote(n *NoteUsers) *Response
+	GetNoteUserList(noteID int64, ownerEmail string) *[]string
 
 	AddNote(n *Note) *ResponseID
 	UpdateNote(n *Note) *Response
