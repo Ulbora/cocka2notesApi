@@ -119,6 +119,7 @@ type CheckboxNoteItem struct {
 type API interface {
 	AddUser(u *User) *Response
 	UpdateUser(u *User) *Response
+	GetUser(email string) *User
 
 	AddUserToNote(n *NoteUsers) *Response
 	GetNoteUserList(noteID int64, ownerEmail string) *[]string

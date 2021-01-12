@@ -98,3 +98,18 @@ func (a *NotesAPI) GetNoteUserList(noteID int64, ownerEmail string) *[]string {
 
 	return &rtn
 }
+
+//GetUser GetUser
+func (a *NotesAPI) GetUser(email string) *User {
+	var rtn User
+	var url = a.restURL + "/rs/user/get/" + email
+	a.log.Debug("url: ", url)
+
+	req := a.buildRequest(get, url, a.headers, nil)
+	suc, stat := a.proxy.Do(req, &rtn)
+
+	a.log.Debug("suc: ", suc)
+	a.log.Debug("stat: ", stat)
+
+	return &rtn
+}
