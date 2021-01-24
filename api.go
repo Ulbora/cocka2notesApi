@@ -50,6 +50,12 @@ type Response struct {
 	Message string `json:"message"`
 }
 
+//LoginResponse LoginResponse
+type LoginResponse struct {
+	Success bool   `json:"success"`
+	Email   string `json:"email"`
+}
+
 //Headers Headers
 type Headers struct {
 	headers map[string]string
@@ -115,11 +121,22 @@ type CheckboxNoteItem struct {
 	NoteID  int64  `json:"noteId"`
 }
 
+//MailServer MailServer
+type MailServer struct {
+	ID          int64  `json:"id"`
+	Host        string `json:"host"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	Port        string `json:"port"`
+	SenderEmail string `json:"senderEmail"`
+}
+
 //API API
 type API interface {
 	AddUser(u *User) *Response
 	UpdateUser(u *User) *Response
 	GetUser(email string) *User
+	Login(u *User) *LoginResponse
 
 	AddUserToNote(n *NoteUsers) *Response
 	GetNoteUserList(noteID int64, ownerEmail string) *[]string
@@ -138,4 +155,6 @@ type API interface {
 	AddNoteItem(ni *NoteItem) *ResponseID
 	UpdateNoteItem(ni *NoteItem) *Response
 	DeleteNoteItem(id int64) *Response
+
+	GetMailServer() *MailServer
 }

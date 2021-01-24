@@ -113,3 +113,20 @@ func (a *NotesAPI) GetUser(email string) *User {
 
 	return &rtn
 }
+
+//Login Login
+func (a *NotesAPI) Login(u *User) *LoginResponse {
+	var rtn LoginResponse
+	var aurl = a.restURL + "/rs/user/login"
+	a.log.Debug("url: ", aurl)
+	aJSON, err := json.Marshal(u)
+	if err == nil {
+		reqacu := a.buildRequest(post, aurl, a.headers, aJSON)
+		sucaacu, stat := a.proxy.Do(reqacu, &rtn)
+		a.log.Debug("suc: ", sucaacu)
+		a.log.Debug("stat: ", stat)
+	}
+	a.log.Debug("rtn: ", rtn)
+
+	return &rtn
+}
