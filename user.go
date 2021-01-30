@@ -130,3 +130,22 @@ func (a *NotesAPI) Login(u *User) *LoginResponse {
 
 	return &rtn
 }
+
+//ResetPassword ResetPassword
+func (a *NotesAPI) ResetPassword(u *User) *Response {
+	var rtn Response
+	var url = a.restURL + "/rs/user/password/reset"
+	a.log.Debug("url: ", url)
+	aJSON, err := json.Marshal(u)
+	if err == nil {
+		reqacuu := a.buildRequest(put, url, a.headers, aJSON)
+		acuusuc, stat := a.proxy.Do(reqacuu, &rtn)
+		a.log.Debug("suc: ", acuusuc)
+		a.log.Debug("stat: ", stat)
+		if !acuusuc {
+			rtn.Code = int64(stat)
+		}
+	}
+	a.log.Debug("rtn: ", rtn)
+	return &rtn
+}

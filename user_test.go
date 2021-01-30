@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
 	"testing"
 
 	px "github.com/Ulbora/GoProxy"
@@ -392,6 +391,88 @@ func TestNotesAPI_Login(t *testing.T) {
 	fmt.Println("AddUser: ", res)
 
 	if !res.Success {
+		t.Fail()
+	}
+}
+
+func TestNotesAPI_ResetPassword(t *testing.T) {
+	var sapi NotesAPI
+	//sapi.SetAPIKey("123")
+
+	sapi.SetRestURL("http://localhost:3000")
+
+	sapi.SetAPIKey("GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
+
+	var head Headers
+	sapi.SetHeader(&head)
+
+	api := sapi.GetNew()
+	sapi.SetLogLevel(lg.AllLevel)
+
+	//---mock out the call
+	var gp px.MockGoProxy
+	var mres http.Response
+	mres.Body = ioutil.NopCloser(bytes.NewBufferString(`{"success":true}`))
+	gp.MockResp = &mres
+	gp.MockDoSuccess1 = true
+	gp.MockRespCode = 200
+	sapi.OverrideProxy(&gp)
+	//---end mock out the call
+
+	// var crt sdbi.Category
+	// crt.Description = "test"
+	// crt.Name = "stuff"
+
+	var u User
+	u.Email = "test@test.com"
+	//u.Password = "testerqqq"
+
+	res := api.ResetPassword(&u)
+
+	fmt.Println("ResetPassword: ", res)
+
+	if !res.Success {
+		t.Fail()
+	}
+}
+
+func TestNotesAPI_ResetPasswordFail(t *testing.T) {
+	var sapi NotesAPI
+	//sapi.SetAPIKey("123")
+
+	sapi.SetRestURL("http://localhost:3000")
+
+	sapi.SetAPIKey("GDG651GFD66FD16151sss651f651ff65555ddfhjklyy5")
+
+	var head Headers
+	sapi.SetHeader(&head)
+
+	api := sapi.GetNew()
+	sapi.SetLogLevel(lg.AllLevel)
+
+	//---mock out the call
+	var gp px.MockGoProxy
+	var mres http.Response
+	mres.Body = ioutil.NopCloser(bytes.NewBufferString(`{"success":false}`))
+	gp.MockResp = &mres
+	gp.MockDoSuccess1 = false
+	gp.MockRespCode = 400
+	sapi.OverrideProxy(&gp)
+	//---end mock out the call
+
+	// var crt sdbi.Category
+	// crt.Description = "test"
+	// crt.Name = "stuff"
+
+	var u User
+	u.Email = "test@test.com"
+	//u.Password = "testerqqq"
+
+	res := api.ResetPassword(&u)
+
+	fmt.Println("ResetPassword: ", res)
+
+	if res.Success {
 		t.Fail()
 	}
 }

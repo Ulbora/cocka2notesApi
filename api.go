@@ -137,6 +137,7 @@ type API interface {
 	UpdateUser(u *User) *Response
 	GetUser(email string) *User
 	Login(u *User) *LoginResponse
+	ResetPassword(u *User) *Response
 
 	AddUserToNote(n *NoteUsers) *Response
 	GetNoteUserList(noteID int64, ownerEmail string) *[]string
@@ -145,7 +146,7 @@ type API interface {
 	UpdateNote(n *Note) *Response
 	GetCheckboxNote(id int64) *CheckboxNote
 	GetNote(id int64) *Note
-	GetUsersNotes(email string) *[]Note
+	GetUsersNotes(email string) (*[]Note, bool)
 	DeleteNote(id int64, ownerEmail string) *Response
 
 	AddCheckboxItem(ni *CheckboxNoteItem) *ResponseID
@@ -155,6 +156,4 @@ type API interface {
 	AddNoteItem(ni *NoteItem) *ResponseID
 	UpdateNoteItem(ni *NoteItem) *Response
 	DeleteNoteItem(id int64) *Response
-
-	GetMailServer() *MailServer
 }

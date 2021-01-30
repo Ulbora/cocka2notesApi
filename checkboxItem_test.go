@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	
+
 	"testing"
 
 	px "github.com/Ulbora/GoProxy"
@@ -90,9 +90,9 @@ func TestNotesAPI_AddCheckboxItemFail(t *testing.T) {
 	res := api.AddCheckboxItem(&ni)
 
 	fmt.Println("AddCheckboxItem: ", res)
-	fmt.Println("FailAddCheckboxNoteList: ", sapi.FailAddCheckboxNoteList)
+	//fmt.Println("FailAddCheckboxNoteList: ", sapi.FailAddCheckboxNoteList)
 
-	if res.Success || len(sapi.FailAddCheckboxNoteList) != 1 {
+	if res.Success {
 		t.Fail()
 	}
 }
@@ -177,9 +177,9 @@ func TestNotesAPI_UpdateCheckboxItemFail(t *testing.T) {
 	res := api.UpdateCheckboxItem(&ni)
 
 	fmt.Println("UpdateCheckboxItem: ", res)
-	fmt.Println("FailUpdateCheckboxNoteList: ", sapi.FailUpdateCheckboxNoteList)
+	//fmt.Println("FailUpdateCheckboxNoteList: ", sapi.FailUpdateCheckboxNoteList)
 
-	if res.Success || len(sapi.FailUpdateCheckboxNoteList) != 1 {
+	if res.Success {
 		t.Fail()
 	}
 }

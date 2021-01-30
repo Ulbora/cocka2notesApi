@@ -23,25 +23,19 @@ package cocka2notesapi
 
 import (
 	"bytes"
+	"net/http"
+
 	px "github.com/Ulbora/GoProxy"
 	lg "github.com/Ulbora/Level_Logger"
-	"net/http"
 )
 
 //NotesAPI NotesAPI
 type NotesAPI struct {
-	proxy                      px.Proxy
-	log                        *lg.Logger
-	restURL                    string
-	apiKey                     string
-	headers                    *Headers
-	CheckboxNote               CheckboxNote
-	Note                       Note
-	NoteList                   []Note
-	FailAddCheckboxNoteList    []CheckboxNoteItem
-	FailUpdateCheckboxNoteList []CheckboxNoteItem
-	FailAddNoteItemList        []NoteItem
-	FailUpdateNoteItemList     []NoteItem
+	proxy   px.Proxy
+	log     *lg.Logger
+	restURL string
+	apiKey  string
+	headers *Headers
 }
 
 //GetNew GetNew
