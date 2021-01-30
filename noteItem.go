@@ -40,6 +40,9 @@ func (a *NotesAPI) AddNoteItem(ni *NoteItem) *ResponseID {
 		if !suc {
 			rtn.Code = int64(stat)
 		}
+		if !suc || stat != 200 {
+			a.FailAddNoteItemList = append(a.FailAddNoteItemList, *ni)
+		}
 	}
 	a.log.Debug("rtn: ", rtn)
 	return &rtn
@@ -58,6 +61,9 @@ func (a *NotesAPI) UpdateNoteItem(ni *NoteItem) *Response {
 		a.log.Debug("stat: ", stat)
 		if !suc {
 			rtn.Code = int64(stat)
+		}
+		if !suc || stat != 200 {
+			a.FailUpdateNoteItemList = append(a.FailUpdateNoteItemList, *ni)
 		}
 	}
 	a.log.Debug("rtn: ", rtn)

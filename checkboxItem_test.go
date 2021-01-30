@@ -92,7 +92,7 @@ func TestNotesAPI_AddCheckboxItemFail(t *testing.T) {
 	fmt.Println("AddCheckboxItem: ", res)
 	//fmt.Println("FailAddCheckboxNoteList: ", sapi.FailAddCheckboxNoteList)
 
-	if res.Success {
+	if res.Success || len(sapi.FailAddCheckboxNoteList) != 1 {
 		t.Fail()
 	}
 }
@@ -179,7 +179,7 @@ func TestNotesAPI_UpdateCheckboxItemFail(t *testing.T) {
 	fmt.Println("UpdateCheckboxItem: ", res)
 	//fmt.Println("FailUpdateCheckboxNoteList: ", sapi.FailUpdateCheckboxNoteList)
 
-	if res.Success {
+	if res.Success || len(sapi.FailUpdateCheckboxNoteList) != 1{
 		t.Fail()
 	}
 }

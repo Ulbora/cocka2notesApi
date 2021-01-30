@@ -507,11 +507,11 @@ func TestNotesAPI_GetUsersNotes(t *testing.T) {
 	n.Title = "a note to end all notes and then some"
 	n.Type = "checkbox"
 
-	res, suc := api.GetUsersNotes("test@test.com")
+	res := api.GetUsersNotes("test@test.com")
 
 	fmt.Println("GetUsersNotes: ", res)
 
-	if res == nil || !suc {
+	if res == nil {
 		t.Fail()
 	}
 }
@@ -565,11 +565,11 @@ func TestNotesAPI_GetUsersNotesFail(t *testing.T) {
 	n.Title = "a note to end all notes and then some"
 	n.Type = "checkbox"
 
-	res, suc := api.GetUsersNotes("test@test.com")
+	res := api.GetUsersNotes("test@test.com")
 
 	fmt.Println("GetUsersNotes: ", res)
 
-	if res == nil || suc {
+	if res == nil {
 		t.Fail()
 	}
 }

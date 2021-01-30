@@ -73,6 +73,11 @@ func (a *NotesAPI) GetCheckboxNote(id int64) *CheckboxNote {
 
 	req := a.buildRequest(get, url, a.headers, nil)
 	suc, stat := a.proxy.Do(req, &rtn)
+	if suc && stat == 200 {
+		a.CheckboxNote = rtn
+	} else {
+		rtn = a.CheckboxNote
+	}
 
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
@@ -89,6 +94,11 @@ func (a *NotesAPI) GetNote(id int64) *Note {
 
 	req := a.buildRequest(get, url, a.headers, nil)
 	suc, stat := a.proxy.Do(req, &rtn)
+	if suc && stat == 200 {
+		a.Note = rtn
+	} else {
+		rtn = a.Note
+	}
 
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
@@ -97,22 +107,23 @@ func (a *NotesAPI) GetNote(id int64) *Note {
 }
 
 //GetUsersNotes GetUsersNotes
-func (a *NotesAPI) GetUsersNotes(email string) (*[]Note, bool) {
+func (a *NotesAPI) GetUsersNotes(email string) *[]Note {
 	var rtn []Note
-	var suc bool
 	var url = a.restURL + "/rs/note/get/all/" + email
 	a.log.Debug("url: ", url)
 
 	req := a.buildRequest(get, url, a.headers, nil)
 	suc, stat := a.proxy.Do(req, &rtn)
 	if suc && stat == 200 {
-		suc = true
+		a.NoteList = rtn
+	} else {
+		rtn = a.NoteList
 	}
 
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
 
-	return &rtn, suc
+	return &rtn
 }
 
 //DeleteNote DeleteNote

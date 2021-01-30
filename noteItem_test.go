@@ -90,7 +90,7 @@ func TestNotesAPI_AddNoteItemFail(t *testing.T) {
 	fmt.Println("AddNoteItem: ", res)
 	//fmt.Println("FailAddNoteItemList: ", sapi.FailAddNoteItemList)
 
-	if res.Success {
+	if res.Success || len(sapi.FailAddNoteItemList) != 1 {
 		t.Fail()
 	}
 }
@@ -175,7 +175,7 @@ func TestNotesAPI_UpdateNoteItemFail(t *testing.T) {
 	fmt.Println("UpdateNoteItem: ", res)
 	//fmt.Println("FailUpdateNoteItemList: ", sapi.FailUpdateNoteItemList)
 
-	if res.Success {
+	if res.Success || len(sapi.FailUpdateNoteItemList) != 1 {
 		t.Fail()
 	}
 }

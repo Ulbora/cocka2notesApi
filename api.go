@@ -146,7 +146,7 @@ type API interface {
 	UpdateNote(n *Note) *Response
 	GetCheckboxNote(id int64) *CheckboxNote
 	GetNote(id int64) *Note
-	GetUsersNotes(email string) (*[]Note, bool)
+	GetUsersNotes(email string) *[]Note
 	DeleteNote(id int64, ownerEmail string) *Response
 
 	AddCheckboxItem(ni *CheckboxNoteItem) *ResponseID

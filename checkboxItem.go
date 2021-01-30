@@ -40,6 +40,9 @@ func (a *NotesAPI) AddCheckboxItem(ni *CheckboxNoteItem) *ResponseID {
 		if !suc {
 			rtn.Code = int64(stat)
 		}
+		if !suc || stat != 200 {
+			a.FailAddCheckboxNoteList = append(a.FailAddCheckboxNoteList, *ni)
+		}
 	}
 	a.log.Debug("rtn: ", rtn)
 	return &rtn
@@ -58,6 +61,9 @@ func (a *NotesAPI) UpdateCheckboxItem(ni *CheckboxNoteItem) *Response {
 		a.log.Debug("stat: ", stat)
 		if !suc {
 			rtn.Code = int64(stat)
+		}
+		if !suc || stat != 200 {
+			a.FailUpdateCheckboxNoteList = append(a.FailAddCheckboxNoteList, *ni)
 		}
 	}
 	a.log.Debug("rtn: ", rtn)
