@@ -90,8 +90,10 @@ func (a *NotesAPI) DeleteCheckboxItem(id int64) *Response {
 
 func (a *NotesAPI) setSavedCheckboxItem(cbi *CheckboxNoteItem) {
 	//update existing item
+	a.log.Debug("saving in updating: ", *cbi)
 	if cbi.ID != 0 {
 		for _, cb := range a.checkboxNoteList {
+			a.log.Debug("saving in updating in for loop: ", *cb)
 			if cb.ID == cbi.NoteID {
 				a.log.Debug("found cb and updating: ", *cb)
 				for i := range cb.NoteItems {
