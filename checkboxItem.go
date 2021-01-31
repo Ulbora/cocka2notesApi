@@ -106,8 +106,8 @@ func (a *NotesAPI) setSavedCheckboxItem(cbi *CheckboxNoteItem) {
 						break
 					}
 				}
+				break
 			}
-			break
 		}
 	} else if cbi.NoteID != 0 {
 		//add the item as new

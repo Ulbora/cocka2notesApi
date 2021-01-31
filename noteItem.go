@@ -92,6 +92,7 @@ func (a *NotesAPI) setSavedTextItem(cbi *NoteItem) {
 	//update existing item
 	if cbi.ID != 0 {
 		for _, cb := range a.textNoteList {
+			a.log.Debug("saving in updating in for loop: ", *cb)
 			if cb.ID == cbi.NoteID {
 				a.log.Debug("found text and updating: ", *cb)
 				for i := range cb.NoteItems {
@@ -103,8 +104,8 @@ func (a *NotesAPI) setSavedTextItem(cbi *NoteItem) {
 						break
 					}
 				}
+				break
 			}
-			break
 		}
 	} else if cbi.NoteID != 0 {
 		//add the item as new
