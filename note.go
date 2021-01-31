@@ -66,44 +66,53 @@ func (a *NotesAPI) UpdateNote(n *Note) *Response {
 
 //GetCheckboxNote GetCheckboxNote
 func (a *NotesAPI) GetCheckboxNote(id int64) *CheckboxNote {
-	var rtn CheckboxNote
+	var rtn *CheckboxNote
+
 	idStr := strconv.FormatInt(id, 10)
 	var url = a.restURL + "/rs/note/get/" + idStr
 	a.log.Debug("url: ", url)
 
+	var ncbn CheckboxNote
 	req := a.buildRequest(get, url, a.headers, nil)
-	suc, stat := a.proxy.Do(req, &rtn)
+	suc, stat := a.proxy.Do(req, &ncbn)
 	if suc && stat == 200 {
-		a.CheckboxNote = rtn
+		a.setSavedCheckboxNote(&ncbn)
+		rtn = &ncbn
 	} else {
-		rtn = a.CheckboxNote
+		rtn = a.getSavedCheckboxNote(id)
+		if rtn == nil {
+			rtn = &ncbn
+		}
 	}
 
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
 
-	return &rtn
+	return rtn
 }
 
 //GetNote GetNote
 func (a *NotesAPI) GetNote(id int64) *Note {
-	var rtn Note
+	var rtn *Note
 	idStr := strconv.FormatInt(id, 10)
 	var url = a.restURL + "/rs/note/get/" + idStr
 	a.log.Debug("url: ", url)
-
+	var txn Note
 	req := a.buildRequest(get, url, a.headers, nil)
-	suc, stat := a.proxy.Do(req, &rtn)
+	suc, stat := a.proxy.Do(req, &txn)
 	if suc && stat == 200 {
-		a.Note = rtn
+		a.setSavedTextNote(&txn)
+		rtn = &txn
 	} else {
-		rtn = a.Note
+		rtn = a.getSavedTextNote(id)
+		if rtn == nil {
+			rtn = &txn
+		}
 	}
-
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
 
-	return &rtn
+	return rtn
 }
 
 //GetUsersNotes GetUsersNotes
@@ -115,9 +124,9 @@ func (a *NotesAPI) GetUsersNotes(email string) *[]Note {
 	req := a.buildRequest(get, url, a.headers, nil)
 	suc, stat := a.proxy.Do(req, &rtn)
 	if suc && stat == 200 {
-		a.NoteList = rtn
+		a.noteList = rtn
 	} else {
-		rtn = a.NoteList
+		rtn = a.noteList
 	}
 
 	a.log.Debug("suc: ", suc)
@@ -138,4 +147,64 @@ func (a *NotesAPI) DeleteNote(id int64, ownerEmail string) *Response {
 	a.log.Debug("suc: ", dspsuc)
 	a.log.Debug("stat: ", stat)
 	return &rtn
+}
+
+func (a *NotesAPI) setSavedCheckboxNote(cb *CheckboxNote) {
+	var found bool
+	for _, cbn := range a.checkboxNoteList {
+		if cbn.ID == cb.ID {
+			a.log.Debug("found : ", cbn)
+			cbn.LastUsed = cb.LastUsed
+			cbn.NoteItems = cb.NoteItems
+			cbn.Title = cb.Title
+			found = true
+			break
+		}
+	}
+	if !found {
+		a.log.Debug("not found : ")
+		a.checkboxNoteList = append(a.checkboxNoteList, cb)
+	}
+}
+
+func (a *NotesAPI) getSavedCheckboxNote(id int64) *CheckboxNote {
+	var cbn *CheckboxNote
+	for _, cb := range a.checkboxNoteList {
+		if cb.ID == id {
+			a.log.Debug("getting found cb note: ", cb)
+			cbn = cb
+			break
+		}
+	}
+	return cbn
+}
+
+func (a *NotesAPI) setSavedTextNote(tn *Note) {
+	var found bool
+	for _, txn := range a.textNoteList {
+		if txn.ID == tn.ID {
+			a.log.Debug("found : ", txn)
+			txn.LastUsed = tn.LastUsed
+			txn.NoteItems = tn.NoteItems
+			txn.Title = tn.Title
+			found = true
+			break
+		}
+	}
+	if !found {
+		a.log.Debug("not found : ")
+		a.textNoteList = append(a.textNoteList, tn)
+	}
+}
+
+func (a *NotesAPI) getSavedTextNote(id int64) *Note {
+	var txn *Note
+	for _, tn := range a.textNoteList {
+		if tn.ID == id {
+			a.log.Debug("getting found cb note: ", tn)
+			txn = tn
+			break
+		}
+	}
+	return txn
 }

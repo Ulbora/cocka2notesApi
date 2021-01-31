@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"testing"
+	"time"
 
 	px "github.com/Ulbora/GoProxy"
 	lg "github.com/Ulbora/Level_Logger"
@@ -219,6 +220,103 @@ func TestNotesAPI_DeleteNoteItem(t *testing.T) {
 	fmt.Println("DeleteNoteItem: ", res)
 
 	if !res.Success {
+		t.Fail()
+	}
+}
+
+func TestNotesAPI_setSavedTextItem(t *testing.T) {
+	var sapi NotesAPI
+
+	var cbilst []NoteItem
+	var cbi1 NoteItem
+	cbi1.ID = 1
+	cbi1.NoteID = 5
+	cbi1.Text = "bread"
+	cbilst = append(cbilst, cbi1)
+
+	var cbi2 NoteItem
+	cbi2.ID = 2
+	cbi2.NoteID = 5
+	cbi2.Text = "milk"
+	cbilst = append(cbilst, cbi2)
+
+	var cb Note
+	cb.ID = 5
+	cb.LastUsed = time.Now()
+	cb.OwnerEmail = "tester@tst.com"
+	cb.NoteItems = cbilst
+	cb.Title = "text note 1"
+	cb.Type = "note"
+	api := sapi.GetNew()
+
+	api.setSavedTextNote(&cb)
+
+	var cbi3 NoteItem
+	cbi3.NoteID = 5
+	cbi3.Text = "cream"
+
+	api.setSavedTextItem(&cbi3)
+
+	if len(sapi.textNoteList[0].NoteItems) != 3 {
+		t.Fail()
+	}
+
+}
+
+func TestNotesAPI_setSavedTextItem2(t *testing.T) {
+	var sapi NotesAPI
+
+	var cbilst []NoteItem
+	var cbi1 NoteItem
+	cbi1.ID = 1
+	cbi1.NoteID = 5
+	cbi1.Text = "bread"
+	cbilst = append(cbilst, cbi1)
+
+	var cbi2 NoteItem
+	cbi2.ID = 2
+	cbi2.NoteID = 5
+	cbi2.Text = "milk"
+	cbilst = append(cbilst, cbi2)
+
+	var cb Note
+	cb.ID = 5
+	cb.LastUsed = time.Now()
+	cb.OwnerEmail = "tester@tst.com"
+	cb.NoteItems = cbilst
+	cb.Title = "cb note 1"
+	cb.Type = "note"
+	api := sapi.GetNew()
+
+	api.setSavedTextNote(&cb)
+
+	var cbi3 NoteItem
+	cbi3.ID = 2
+	cbi3.NoteID = 5
+	cbi3.Text = "cream"
+
+	api.setSavedTextItem(&cbi3)
+
+	if len(sapi.textNoteList[0].NoteItems) != 2 {
+		t.Fail()
+	}
+
+}
+
+func TestNotesAPI_GetFailAddNoteItemList(t *testing.T) {
+	var sapi NotesAPI
+	api := sapi.GetNew()
+	lst := api.GetFailAddNoteItemList()
+	if len(lst) != 0 {
+		t.Fail()
+	}
+}
+
+func TestNotesAPI_GetFailUpdateNoteItemList(t *testing.T) {
+	var sapi NotesAPI
+	api := sapi.GetNew()
+	lst := api.GetFailUpdateNoteItemList()
+	if len(lst) != 0 {
 		t.Fail()
 	}
 }

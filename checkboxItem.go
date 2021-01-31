@@ -2,7 +2,9 @@ package cocka2notesapi
 
 import (
 	"encoding/json"
+	"math/rand"
 	"strconv"
+	"time"
 )
 
 /*
@@ -41,7 +43,8 @@ func (a *NotesAPI) AddCheckboxItem(ni *CheckboxNoteItem) *ResponseID {
 			rtn.Code = int64(stat)
 		}
 		if !suc || stat != 200 {
-			a.FailAddCheckboxNoteList = append(a.FailAddCheckboxNoteList, *ni)
+			a.FailAddCheckboxNoteItemList = append(a.FailAddCheckboxNoteItemList, *ni)
+			a.setSavedCheckboxItem(ni)
 		}
 	}
 	a.log.Debug("rtn: ", rtn)
@@ -63,7 +66,8 @@ func (a *NotesAPI) UpdateCheckboxItem(ni *CheckboxNoteItem) *Response {
 			rtn.Code = int64(stat)
 		}
 		if !suc || stat != 200 {
-			a.FailUpdateCheckboxNoteList = append(a.FailAddCheckboxNoteList, *ni)
+			a.FailUpdateCheckboxNoteItemList = append(a.FailAddCheckboxNoteItemList, *ni)
+			a.setSavedCheckboxItem(ni)
 		}
 	}
 	a.log.Debug("rtn: ", rtn)
@@ -82,4 +86,48 @@ func (a *NotesAPI) DeleteCheckboxItem(id int64) *Response {
 	a.log.Debug("suc: ", dspsuc)
 	a.log.Debug("stat: ", stat)
 	return &rtn
+}
+
+func (a *NotesAPI) setSavedCheckboxItem(cbi *CheckboxNoteItem) {
+	//update existing item
+	if cbi.ID != 0 {
+		for _, cb := range a.checkboxNoteList {
+			if cb.ID == cbi.NoteID {
+				a.log.Debug("found cb and updating: ", *cb)
+				for i := range cb.NoteItems {
+					a.log.Debug("found cb item: ", cb.NoteItems[i])
+					if cb.NoteItems[i].ID == cbi.ID {
+						a.log.Debug("found cb item and updating: ", cb.NoteItems[i])
+						a.log.Debug("updating to: ", *cbi)
+						cb.NoteItems[i].Checked = cbi.Checked
+						cb.NoteItems[i].Text = cbi.Text
+						break
+					}
+				}
+			}
+			break
+		}
+	} else if cbi.NoteID != 0 {
+		//add the item as new
+		rand.Seed(time.Now().UnixNano())
+		var nid = rand.Int63n(30000)
+		cbi.ID = nid
+		for _, cb := range a.checkboxNoteList {
+			if cb.ID == cbi.NoteID {
+				a.log.Debug("adding new cb item: ", *cbi)
+				cb.NoteItems = append(cb.NoteItems, *cbi)
+				break
+			}
+		}
+	}
+}
+
+//GetFailAddCheckboxNoteItemList GetFailAddCheckboxNoteItemList
+func (a *NotesAPI) GetFailAddCheckboxNoteItemList() []CheckboxNoteItem {
+	return a.FailAddCheckboxNoteItemList
+}
+
+//GetFailUpdateCheckboxNoteItemList GetFailUpdateCheckboxNoteItemList
+func (a *NotesAPI) GetFailUpdateCheckboxNoteItemList() []CheckboxNoteItem {
+	return a.FailUpdateCheckboxNoteItemList
 }

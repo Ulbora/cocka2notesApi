@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
 	"testing"
+	"time"
 
 	px "github.com/Ulbora/GoProxy"
 	lg "github.com/Ulbora/Level_Logger"
@@ -92,7 +92,7 @@ func TestNotesAPI_AddCheckboxItemFail(t *testing.T) {
 	fmt.Println("AddCheckboxItem: ", res)
 	//fmt.Println("FailAddCheckboxNoteList: ", sapi.FailAddCheckboxNoteList)
 
-	if res.Success || len(sapi.FailAddCheckboxNoteList) != 1 {
+	if res.Success || len(sapi.FailAddCheckboxNoteItemList) != 1 {
 		t.Fail()
 	}
 }
@@ -179,7 +179,7 @@ func TestNotesAPI_UpdateCheckboxItemFail(t *testing.T) {
 	fmt.Println("UpdateCheckboxItem: ", res)
 	//fmt.Println("FailUpdateCheckboxNoteList: ", sapi.FailUpdateCheckboxNoteList)
 
-	if res.Success || len(sapi.FailUpdateCheckboxNoteList) != 1{
+	if res.Success || len(sapi.FailUpdateCheckboxNoteItemList) != 1 {
 		t.Fail()
 	}
 }
@@ -223,6 +223,109 @@ func TestNotesAPI_DeleteCheckboxItem(t *testing.T) {
 	fmt.Println("DeleteCheckboxItem: ", res)
 
 	if !res.Success {
+		t.Fail()
+	}
+}
+
+func TestNotesAPI_setSavedCheckboxItem(t *testing.T) {
+	var sapi NotesAPI
+
+	var cbilst []CheckboxNoteItem
+	var cbi1 CheckboxNoteItem
+	cbi1.Checked = true
+	cbi1.ID = 1
+	cbi1.NoteID = 5
+	cbi1.Text = "bread"
+	cbilst = append(cbilst, cbi1)
+
+	var cbi2 CheckboxNoteItem
+	cbi2.Checked = false
+	cbi2.ID = 2
+	cbi2.NoteID = 5
+	cbi2.Text = "milk"
+	cbilst = append(cbilst, cbi2)
+
+	var cb CheckboxNote
+	cb.ID = 5
+	cb.LastUsed = time.Now()
+	cb.OwnerEmail = "tester@tst.com"
+	cb.NoteItems = cbilst
+	cb.Title = "cb note 1"
+	cb.Type = "checkbox"
+	api := sapi.GetNew()
+
+	api.setSavedCheckboxNote(&cb)
+
+	var cbi3 CheckboxNoteItem
+	cbi3.Checked = false
+	cbi3.NoteID = 5
+	cbi3.Text = "cream"
+
+	api.setSavedCheckboxItem(&cbi3)
+
+	if len(sapi.checkboxNoteList[0].NoteItems) != 3 {
+		t.Fail()
+	}
+
+}
+
+func TestNotesAPI_setSavedCheckboxItem2(t *testing.T) {
+	var sapi NotesAPI
+
+	var cbilst []CheckboxNoteItem
+	var cbi1 CheckboxNoteItem
+	cbi1.Checked = true
+	cbi1.ID = 1
+	cbi1.NoteID = 5
+	cbi1.Text = "bread"
+	cbilst = append(cbilst, cbi1)
+
+	var cbi2 CheckboxNoteItem
+	cbi2.Checked = false
+	cbi2.ID = 2
+	cbi2.NoteID = 5
+	cbi2.Text = "milk"
+	cbilst = append(cbilst, cbi2)
+
+	var cb CheckboxNote
+	cb.ID = 5
+	cb.LastUsed = time.Now()
+	cb.OwnerEmail = "tester@tst.com"
+	cb.NoteItems = cbilst
+	cb.Title = "cb note 1"
+	cb.Type = "checkbox"
+	api := sapi.GetNew()
+
+	api.setSavedCheckboxNote(&cb)
+
+	var cbi3 CheckboxNoteItem
+	cbi3.ID = 2
+	cbi3.Checked = true
+	cbi3.NoteID = 5
+	cbi3.Text = "cream"
+
+	api.setSavedCheckboxItem(&cbi3)
+
+	if len(sapi.checkboxNoteList[0].NoteItems) != 2 {
+		t.Fail()
+	}
+
+}
+
+func TestNotesAPI_GetFailAddCheckboxNoteItemList(t *testing.T) {
+	var sapi NotesAPI
+	api := sapi.GetNew()
+	lst := api.GetFailAddCheckboxNoteItemList()
+	if len(lst) != 0 {
+		t.Fail()
+	}
+}
+
+func TestNotesAPI_GetFailUpdateCheckboxNoteItemList(t *testing.T) {
+	var sapi NotesAPI
+	api := sapi.GetNew()
+	lst := api.GetFailUpdateCheckboxNoteItemList()
+	if len(lst) != 0 {
 		t.Fail()
 	}
 }

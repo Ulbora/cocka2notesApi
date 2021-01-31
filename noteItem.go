@@ -2,7 +2,9 @@ package cocka2notesapi
 
 import (
 	"encoding/json"
+	"math/rand"
 	"strconv"
+	"time"
 )
 
 /*
@@ -42,6 +44,7 @@ func (a *NotesAPI) AddNoteItem(ni *NoteItem) *ResponseID {
 		}
 		if !suc || stat != 200 {
 			a.FailAddNoteItemList = append(a.FailAddNoteItemList, *ni)
+			a.setSavedTextItem(ni)
 		}
 	}
 	a.log.Debug("rtn: ", rtn)
@@ -64,6 +67,7 @@ func (a *NotesAPI) UpdateNoteItem(ni *NoteItem) *Response {
 		}
 		if !suc || stat != 200 {
 			a.FailUpdateNoteItemList = append(a.FailUpdateNoteItemList, *ni)
+			a.setSavedTextItem(ni)
 		}
 	}
 	a.log.Debug("rtn: ", rtn)
@@ -82,4 +86,47 @@ func (a *NotesAPI) DeleteNoteItem(id int64) *Response {
 	a.log.Debug("suc: ", dspsuc)
 	a.log.Debug("stat: ", stat)
 	return &rtn
+}
+
+func (a *NotesAPI) setSavedTextItem(cbi *NoteItem) {
+	//update existing item
+	if cbi.ID != 0 {
+		for _, cb := range a.textNoteList {
+			if cb.ID == cbi.NoteID {
+				a.log.Debug("found text and updating: ", *cb)
+				for i := range cb.NoteItems {
+					a.log.Debug("found cb item: ", cb.NoteItems[i])
+					if cb.NoteItems[i].ID == cbi.ID {
+						a.log.Debug("found cb item and updating: ", cb.NoteItems[i])
+						a.log.Debug("updating to: ", *cbi)
+						cb.NoteItems[i].Text = cbi.Text
+						break
+					}
+				}
+			}
+			break
+		}
+	} else if cbi.NoteID != 0 {
+		//add the item as new
+		rand.Seed(time.Now().UnixNano())
+		var nid = rand.Int63n(30000)
+		cbi.ID = nid
+		for _, cb := range a.textNoteList {
+			if cb.ID == cbi.NoteID {
+				a.log.Debug("adding new text item: ", *cbi)
+				cb.NoteItems = append(cb.NoteItems, *cbi)
+				break
+			}
+		}
+	}
+}
+
+//GetFailAddNoteItemList GetFailAddNoteItemList
+func (a *NotesAPI) GetFailAddNoteItemList() []NoteItem {
+	return a.FailAddNoteItemList
+}
+
+//GetFailUpdateNoteItemList GetFailUpdateNoteItemList
+func (a *NotesAPI) GetFailUpdateNoteItemList() []NoteItem {
+	return a.FailUpdateNoteItemList
 }

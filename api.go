@@ -149,6 +149,19 @@ type API interface {
 	GetUsersNotes(email string) *[]Note
 	DeleteNote(id int64, ownerEmail string) *Response
 
+	setSavedCheckboxNote(cb *CheckboxNote)
+	getSavedCheckboxNote(id int64) *CheckboxNote
+	setSavedTextNote(tx *Note)
+	getSavedTextNote(id int64) *Note
+
+	setSavedCheckboxItem(cb *CheckboxNoteItem)
+	setSavedTextItem(cb *NoteItem)
+
+	GetFailAddCheckboxNoteItemList() []CheckboxNoteItem
+	GetFailUpdateCheckboxNoteItemList() []CheckboxNoteItem
+	GetFailAddNoteItemList() []NoteItem
+	GetFailUpdateNoteItemList() []NoteItem
+
 	AddCheckboxItem(ni *CheckboxNoteItem) *ResponseID
 	UpdateCheckboxItem(ni *CheckboxNoteItem) *Response
 	DeleteCheckboxItem(id int64) *Response
