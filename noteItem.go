@@ -91,19 +91,21 @@ func (a *NotesAPI) DeleteNoteItem(id int64) *Response {
 func (a *NotesAPI) setSavedTextItem(cbi *NoteItem) {
 	//update existing item
 	if cbi.ID != 0 {
-		for _, cb := range a.textNoteList {
-			a.log.Debug("saving in updating in for loop: ", *cb)
-			if cb.ID == cbi.NoteID {
-				a.log.Debug("found text and updating: ", *cb)
-				for i := range cb.NoteItems {
-					a.log.Debug("found cb item: ", cb.NoteItems[i])
-					if cb.NoteItems[i].ID == cbi.ID {
-						a.log.Debug("found cb item and updating: ", cb.NoteItems[i])
+		for i := range a.noteList {
+			a.log.Debug("saving in updating in for loop: ", a.noteList[i])
+			if a.noteList[i].ID == cbi.NoteID {
+				a.log.Debug("found text and updating: ", a.noteList[i])
+				ilst := a.noteList[i].NoteItems.([]NoteItem)
+				for ii := range ilst {
+					a.log.Debug("found cb item: ", ilst[ii])
+					if ilst[ii].ID == cbi.ID {
+						a.log.Debug("found cb item and updating: ", ilst[ii])
 						a.log.Debug("updating to: ", *cbi)
-						cb.NoteItems[i].Text = cbi.Text
+						ilst[ii].Text = cbi.Text
 						break
 					}
 				}
+				a.noteList[i].NoteItems = ilst
 				break
 			}
 		}
@@ -112,10 +114,13 @@ func (a *NotesAPI) setSavedTextItem(cbi *NoteItem) {
 		rand.Seed(time.Now().UnixNano())
 		var nid = rand.Int63n(30000)
 		cbi.ID = nid
-		for _, cb := range a.textNoteList {
-			if cb.ID == cbi.NoteID {
+		for i := range a.noteList {
+			if a.noteList[i].ID == cbi.NoteID {
 				a.log.Debug("adding new text item: ", *cbi)
-				cb.NoteItems = append(cb.NoteItems, *cbi)
+				ilst := a.noteList[i].NoteItems.([]NoteItem)
+				a.log.Debug("existing cb item: ", ilst)
+				ilst = append(ilst, *cbi)
+				a.noteList[i].NoteItems = ilst
 				break
 			}
 		}

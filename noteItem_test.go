@@ -240,7 +240,7 @@ func TestNotesAPI_setSavedTextItem(t *testing.T) {
 	cbi2.Text = "milk"
 	cbilst = append(cbilst, cbi2)
 
-	var cb Note
+	var cb TextNote
 	cb.ID = 5
 	cb.LastUsed = time.Now()
 	cb.OwnerEmail = "tester@tst.com"
@@ -249,7 +249,18 @@ func TestNotesAPI_setSavedTextItem(t *testing.T) {
 	cb.Type = "note"
 	api := sapi.GetNew()
 
-	api.setSavedTextNote(&cb)
+	var ntlst []Note
+	var n1 Note
+	n1.ID = 5
+	n1.LastUsed = time.Now()
+	n1.OwnerEmail = "tester@tst.com"
+	n1.NoteItems = cbilst
+	n1.Title = "cb note 1"
+	n1.Type = "checkbox"
+	ntlst = append(ntlst, n1)
+	sapi.noteList = ntlst
+
+	//api.setSavedTextNote(&cb)
 
 	var cbi3 NoteItem
 	cbi3.NoteID = 5
@@ -257,7 +268,9 @@ func TestNotesAPI_setSavedTextItem(t *testing.T) {
 
 	api.setSavedTextItem(&cbi3)
 
-	if len(sapi.textNoteList[0].NoteItems) != 3 {
+	ilst := sapi.noteList[0].NoteItems.([]NoteItem)
+
+	if len(ilst) != 3 {
 		t.Fail()
 	}
 
@@ -279,7 +292,7 @@ func TestNotesAPI_setSavedTextItem2(t *testing.T) {
 	cbi2.Text = "milk"
 	cbilst = append(cbilst, cbi2)
 
-	var cb Note
+	var cb TextNote
 	cb.ID = 5
 	cb.LastUsed = time.Now()
 	cb.OwnerEmail = "tester@tst.com"
@@ -288,7 +301,18 @@ func TestNotesAPI_setSavedTextItem2(t *testing.T) {
 	cb.Type = "note"
 	api := sapi.GetNew()
 
-	api.setSavedTextNote(&cb)
+	var ntlst []Note
+	var n1 Note
+	n1.ID = 5
+	n1.LastUsed = time.Now()
+	n1.OwnerEmail = "tester@tst.com"
+	n1.NoteItems = cbilst
+	n1.Title = "cb note 1"
+	n1.Type = "checkbox"
+	ntlst = append(ntlst, n1)
+	sapi.noteList = ntlst
+
+	//api.setSavedTextNote(&cb)
 
 	var cbi3 NoteItem
 	cbi3.ID = 2
@@ -297,7 +321,9 @@ func TestNotesAPI_setSavedTextItem2(t *testing.T) {
 
 	api.setSavedTextItem(&cbi3)
 
-	if len(sapi.textNoteList[0].NoteItems) != 2 {
+	ilst := sapi.noteList[0].NoteItems.([]NoteItem)
+
+	if len(ilst) != 2 {
 		t.Fail()
 	}
 

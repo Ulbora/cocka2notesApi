@@ -92,20 +92,22 @@ func (a *NotesAPI) setSavedCheckboxItem(cbi *CheckboxNoteItem) {
 	//update existing item
 	a.log.Debug("saving in updating: ", *cbi)
 	if cbi.ID != 0 {
-		for _, cb := range a.checkboxNoteList {
-			a.log.Debug("saving in updating in for loop: ", *cb)
-			if cb.ID == cbi.NoteID {
-				a.log.Debug("found cb and updating: ", *cb)
-				for i := range cb.NoteItems {
-					a.log.Debug("found cb item: ", cb.NoteItems[i])
-					if cb.NoteItems[i].ID == cbi.ID {
-						a.log.Debug("found cb item and updating: ", cb.NoteItems[i])
+		for i := range a.noteList {
+			a.log.Debug("saving in updating in for loop: ", a.noteList[i])
+			if a.noteList[i].ID == cbi.NoteID {
+				a.log.Debug("found cb and updating: ", a.noteList[i])
+				ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
+				for ii := range ilst {
+					a.log.Debug("found cb item: ", ilst[ii])
+					if ilst[ii].ID == cbi.ID {
+						a.log.Debug("found cb item and updating: ", ilst[ii])
 						a.log.Debug("updating to: ", *cbi)
-						cb.NoteItems[i].Checked = cbi.Checked
-						cb.NoteItems[i].Text = cbi.Text
+						ilst[ii].Checked = cbi.Checked
+						ilst[ii].Text = cbi.Text
 						break
 					}
 				}
+				a.noteList[i].NoteItems = ilst
 				break
 			}
 		}
@@ -114,10 +116,13 @@ func (a *NotesAPI) setSavedCheckboxItem(cbi *CheckboxNoteItem) {
 		rand.Seed(time.Now().UnixNano())
 		var nid = rand.Int63n(30000)
 		cbi.ID = nid
-		for _, cb := range a.checkboxNoteList {
-			if cb.ID == cbi.NoteID {
+		for i := range a.noteList {
+			if a.noteList[i].ID == cbi.NoteID {
 				a.log.Debug("adding new cb item: ", *cbi)
-				cb.NoteItems = append(cb.NoteItems, *cbi)
+				ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
+				a.log.Debug("existing cb item: ", ilst)
+				ilst = append(ilst, *cbi)
+				a.noteList[i].NoteItems = ilst
 				break
 			}
 		}

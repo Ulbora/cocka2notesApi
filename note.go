@@ -80,9 +80,6 @@ func (a *NotesAPI) GetCheckboxNote(id int64) *CheckboxNote {
 		rtn = &ncbn
 	} else {
 		rtn = a.getSavedCheckboxNote(id)
-		if rtn == nil {
-			rtn = &ncbn
-		}
 	}
 
 	a.log.Debug("suc: ", suc)
@@ -92,12 +89,12 @@ func (a *NotesAPI) GetCheckboxNote(id int64) *CheckboxNote {
 }
 
 //GetNote GetNote
-func (a *NotesAPI) GetNote(id int64) *Note {
-	var rtn *Note
+func (a *NotesAPI) GetNote(id int64) *TextNote {
+	var rtn *TextNote
 	idStr := strconv.FormatInt(id, 10)
 	var url = a.restURL + "/rs/note/get/" + idStr
 	a.log.Debug("url: ", url)
-	var txn Note
+	var txn TextNote
 	req := a.buildRequest(get, url, a.headers, nil)
 	suc, stat := a.proxy.Do(req, &txn)
 	if suc && stat == 200 {
@@ -105,9 +102,6 @@ func (a *NotesAPI) GetNote(id int64) *Note {
 		rtn = &txn
 	} else {
 		rtn = a.getSavedTextNote(id)
-		if rtn == nil {
-			rtn = &txn
-		}
 	}
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
@@ -116,8 +110,9 @@ func (a *NotesAPI) GetNote(id int64) *Note {
 }
 
 //GetUsersNotes GetUsersNotes
-func (a *NotesAPI) GetUsersNotes(email string) *[]Note {
+func (a *NotesAPI) GetUsersNotes(email string) (*[]Note, bool) {
 	var rtn []Note
+	var suc bool
 	var url = a.restURL + "/rs/note/get/all/" + email
 	a.log.Debug("url: ", url)
 
@@ -125,6 +120,7 @@ func (a *NotesAPI) GetUsersNotes(email string) *[]Note {
 	suc, stat := a.proxy.Do(req, &rtn)
 	if suc && stat == 200 {
 		a.noteList = rtn
+		suc = true
 	} else {
 		rtn = a.noteList
 	}
@@ -132,7 +128,7 @@ func (a *NotesAPI) GetUsersNotes(email string) *[]Note {
 	a.log.Debug("suc: ", suc)
 	a.log.Debug("stat: ", stat)
 
-	return &rtn
+	return &rtn, suc
 }
 
 //DeleteNote DeleteNote
@@ -150,61 +146,69 @@ func (a *NotesAPI) DeleteNote(id int64, ownerEmail string) *Response {
 }
 
 func (a *NotesAPI) setSavedCheckboxNote(cb *CheckboxNote) {
-	var found bool
-	for _, cbn := range a.checkboxNoteList {
-		if cbn.ID == cb.ID {
-			a.log.Debug("found : ", cbn)
-			cbn.LastUsed = cb.LastUsed
-			cbn.NoteItems = cb.NoteItems
-			cbn.Title = cb.Title
-			found = true
+	for i := range a.noteList {
+		if a.noteList[i].ID == cb.ID {
+			a.log.Debug("found : ", a.noteList[i])
+			a.noteList[i].Title = cb.Title
+			a.log.Debug("updated : ", a.noteList[i])
 			break
 		}
-	}
-	if !found {
-		a.log.Debug("not found : ")
-		a.checkboxNoteList = append(a.checkboxNoteList, cb)
 	}
 }
 
 func (a *NotesAPI) getSavedCheckboxNote(id int64) *CheckboxNote {
-	var cbn *CheckboxNote
-	for _, cb := range a.checkboxNoteList {
-		if cb.ID == id {
-			a.log.Debug("getting found cb note: ", cb)
-			cbn = cb
+	var cbn CheckboxNote
+	for i := range a.noteList {
+		a.log.Debug("getting cb note: ", a.noteList[i])
+		if a.noteList[i].ID == id {
+			a.log.Debug("getting found cb note: ", a.noteList[i])
+			cbn.ID = a.noteList[i].ID
+			cbn.LastUsed = a.noteList[i].LastUsed
+			cbn.OwnerEmail = a.noteList[i].OwnerEmail
+			cbn.Title = a.noteList[i].Title
+			cbn.Type = a.noteList[i].Type
+			ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
+			for _, ci := range ilst {
+				cbn.NoteItems = append(cbn.NoteItems, ci)
+			}
 			break
 		}
 	}
-	return cbn
+	return &cbn
 }
 
-func (a *NotesAPI) setSavedTextNote(tn *Note) {
-	var found bool
-	for _, txn := range a.textNoteList {
-		if txn.ID == tn.ID {
-			a.log.Debug("found : ", txn)
-			txn.LastUsed = tn.LastUsed
-			txn.NoteItems = tn.NoteItems
-			txn.Title = tn.Title
-			found = true
+func (a *NotesAPI) setSavedTextNote(tn *TextNote) {
+	for i := range a.noteList {
+		if a.noteList[i].ID == tn.ID {
+			a.log.Debug("found : ", a.noteList[i])
+			a.noteList[i].Title = tn.Title
+			a.log.Debug("updated : ", a.noteList[i])
 			break
 		}
-	}
-	if !found {
-		a.log.Debug("not found : ")
-		a.textNoteList = append(a.textNoteList, tn)
 	}
 }
 
-func (a *NotesAPI) getSavedTextNote(id int64) *Note {
-	var txn *Note
-	for _, tn := range a.textNoteList {
-		if tn.ID == id {
-			a.log.Debug("getting found cb note: ", tn)
-			txn = tn
+func (a *NotesAPI) getSavedTextNote(id int64) *TextNote {
+	var txn TextNote
+	for i := range a.noteList {
+		if a.noteList[i].ID == id {
+			a.log.Debug("getting found cb note: ", a.noteList[i])
+			txn.ID = a.noteList[i].ID
+			txn.LastUsed = a.noteList[i].LastUsed
+			txn.OwnerEmail = a.noteList[i].OwnerEmail
+			txn.Title = a.noteList[i].Title
+			txn.Type = a.noteList[i].Type
+			ilst := a.noteList[i].NoteItems.([]NoteItem)
+			for _, ti := range ilst {
+				txn.NoteItems = append(txn.NoteItems, ti)
+			}
 			break
 		}
 	}
-	return txn
+	return &txn
+}
+
+//SetNoteList SetNoteList
+func (a *NotesAPI) SetNoteList(noteList []Note) {
+	a.noteList = noteList
 }

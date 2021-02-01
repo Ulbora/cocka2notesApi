@@ -36,8 +36,6 @@ type NotesAPI struct {
 	restURL                        string
 	apiKey                         string
 	headers                        *Headers
-	checkboxNoteList               []*CheckboxNote
-	textNoteList                   []*Note
 	noteList                       []Note
 	FailAddCheckboxNoteItemList    []CheckboxNoteItem
 	FailUpdateCheckboxNoteItemList []CheckboxNoteItem

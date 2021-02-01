@@ -86,14 +86,24 @@ type NoteUsers struct {
 	UserEmail  string `json:"userEmail"`
 }
 
-//Note Note
-type Note struct {
+//TextNote TextNote
+type TextNote struct {
 	ID         int64      `json:"id"`
 	Title      string     `json:"title"`
 	Type       string     `json:"type"`
 	OwnerEmail string     `json:"ownerEmail"`
 	NoteItems  []NoteItem `json:"noteItems"`
 	LastUsed   time.Time  `json:"lastUsed"`
+}
+
+//Note Note
+type Note struct {
+	ID         int64       `json:"id"`
+	Title      string      `json:"title"`
+	Type       string      `json:"type"`
+	OwnerEmail string      `json:"ownerEmail"`
+	NoteItems  interface{} `json:"noteItems"`
+	LastUsed   time.Time   `json:"lastUsed"`
 }
 
 //NoteItem NoteItem
@@ -145,22 +155,17 @@ type API interface {
 	AddNote(n *Note) *ResponseID
 	UpdateNote(n *Note) *Response
 	GetCheckboxNote(id int64) *CheckboxNote
-	GetNote(id int64) *Note
-	GetUsersNotes(email string) *[]Note
+	GetNote(id int64) *TextNote
+	GetUsersNotes(email string) (*[]Note, bool)
 	DeleteNote(id int64, ownerEmail string) *Response
 
 	setSavedCheckboxNote(cb *CheckboxNote)
 	getSavedCheckboxNote(id int64) *CheckboxNote
-	setSavedTextNote(tx *Note)
-	getSavedTextNote(id int64) *Note
+	setSavedTextNote(tx *TextNote)
+	getSavedTextNote(id int64) *TextNote
 
 	setSavedCheckboxItem(cb *CheckboxNoteItem)
 	setSavedTextItem(cb *NoteItem)
-
-	GetFailAddCheckboxNoteItemList() []CheckboxNoteItem
-	GetFailUpdateCheckboxNoteItemList() []CheckboxNoteItem
-	GetFailAddNoteItemList() []NoteItem
-	GetFailUpdateNoteItemList() []NoteItem
 
 	AddCheckboxItem(ni *CheckboxNoteItem) *ResponseID
 	UpdateCheckboxItem(ni *CheckboxNoteItem) *Response
@@ -169,4 +174,12 @@ type API interface {
 	AddNoteItem(ni *NoteItem) *ResponseID
 	UpdateNoteItem(ni *NoteItem) *Response
 	DeleteNoteItem(id int64) *Response
+
+	//Offline functionality below
+	GetFailAddCheckboxNoteItemList() []CheckboxNoteItem
+	GetFailUpdateCheckboxNoteItemList() []CheckboxNoteItem
+	GetFailAddNoteItemList() []NoteItem
+	GetFailUpdateNoteItemList() []NoteItem
+
+	SetNoteList(noteList []Note)
 }
