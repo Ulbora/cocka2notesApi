@@ -234,3 +234,8 @@ func (a *NotesAPI) getSavedTextNote(id int64) *TextNote {
 func (a *NotesAPI) SetNoteList(noteList []Note) {
 	a.noteList = noteList
 }
+
+//GetNoteList GetNoteList
+func (a *NotesAPI) GetNoteList() []Note {
+	return a.noteList
+}

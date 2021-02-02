@@ -851,3 +851,51 @@ func TestNotesAPI_SetNoteList(t *testing.T) {
 	}
 
 }
+
+func TestNotesAPI_GetNoteList(t *testing.T) {
+	var sapi NotesAPI
+
+	var cbilst []NoteItem
+	var cbi1 NoteItem
+	cbi1.ID = 1
+	cbi1.NoteID = 5
+	cbi1.Text = "bread"
+	cbilst = append(cbilst, cbi1)
+
+	var cbi2 NoteItem
+	cbi2.ID = 2
+	cbi2.NoteID = 5
+	cbi2.Text = "milk"
+	cbilst = append(cbilst, cbi2)
+
+	var cb TextNote
+	cb.ID = 5
+	cb.LastUsed = time.Now()
+	cb.OwnerEmail = "tester@tst.com"
+	cb.NoteItems = cbilst
+	cb.Title = "text note 1"
+	cb.Type = "note"
+	api := sapi.GetNew()
+
+	var ntlst []Note
+	var n1 Note
+	n1.ID = 5
+	n1.LastUsed = time.Now()
+	n1.OwnerEmail = "tester@tst.com"
+	n1.NoteTextItems = cbilst
+	n1.Title = "text note 1"
+	n1.Type = "note"
+	ntlst = append(ntlst, n1)
+	//sapi.noteList = ntlst
+
+	api.SetNoteList(ntlst)
+
+	nlst := api.GetNoteList()
+	fmt.Println("nlst: ", nlst)
+	fmt.Println("sapi.noteList: ", sapi.noteList)
+
+	if len(nlst) != 1 {
+		t.Fail()
+	}
+
+}

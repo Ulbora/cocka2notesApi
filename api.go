@@ -183,4 +183,5 @@ type API interface {
 	GetFailUpdateNoteItemList() []NoteItem
 
 	SetNoteList(noteList []Note)
+	GetNoteList() []Note
 }
