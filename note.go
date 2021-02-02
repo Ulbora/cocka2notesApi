@@ -167,9 +167,9 @@ func (a *NotesAPI) getSavedCheckboxNote(id int64) *CheckboxNote {
 			cbn.OwnerEmail = a.noteList[i].OwnerEmail
 			cbn.Title = a.noteList[i].Title
 			cbn.Type = a.noteList[i].Type
-			ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
+			ilst := a.noteList[i].NoteItems.([]interface{})
 			for _, ci := range ilst {
-				cbn.NoteItems = append(cbn.NoteItems, ci)
+				cbn.NoteItems = append(cbn.NoteItems, ci.(CheckboxNoteItem))
 			}
 			break
 		}
