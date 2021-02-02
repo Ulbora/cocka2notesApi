@@ -182,6 +182,8 @@ type API interface {
 	GetFailAddNoteItemList() []NoteItem
 	GetFailUpdateNoteItemList() []NoteItem
 
+	FlushFailedCache()
+
 	SetNoteList(noteList []Note)
 	GetNoteList() []Note
 }

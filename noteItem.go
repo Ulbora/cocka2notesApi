@@ -42,7 +42,7 @@ func (a *NotesAPI) AddNoteItem(ni *NoteItem) *ResponseID {
 		if !suc {
 			rtn.Code = int64(stat)
 		}
-		if !suc || stat != 200 {
+		if (!suc || stat != 200) && !a.retryCall {
 			a.FailAddNoteItemList = append(a.FailAddNoteItemList, *ni)
 			a.setSavedTextItem(ni)
 		}
@@ -65,7 +65,7 @@ func (a *NotesAPI) UpdateNoteItem(ni *NoteItem) *Response {
 		if !suc {
 			rtn.Code = int64(stat)
 		}
-		if !suc || stat != 200 {
+		if (!suc || stat != 200) && !a.retryCall {
 			a.FailUpdateNoteItemList = append(a.FailUpdateNoteItemList, *ni)
 			a.setSavedTextItem(ni)
 		}

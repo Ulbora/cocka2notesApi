@@ -41,6 +41,7 @@ type NotesAPI struct {
 	FailUpdateCheckboxNoteItemList []CheckboxNoteItem
 	FailAddNoteItemList            []NoteItem
 	FailUpdateNoteItemList         []NoteItem
+	retryCall                      bool
 }
 
 //GetNew GetNew
@@ -105,4 +106,77 @@ func (a *NotesAPI) SetHeader(head *Headers) {
 //OverrideProxy OverrideProxy
 func (a *NotesAPI) OverrideProxy(proxy px.Proxy) {
 	a.proxy = proxy
+}
+
+//FlushFailedCache FlushFailedCache
+func (a *NotesAPI) FlushFailedCache() {
+	if len(a.FailAddCheckboxNoteItemList) > 0 {
+		a.log.Debug("FailAddCheckboxNoteItemList: ", a.FailAddCheckboxNoteItemList)
+		var suc = true
+		a.retryCall = true
+		for i := range a.FailAddCheckboxNoteItemList {
+			res := a.AddCheckboxItem(&a.FailAddCheckboxNoteItemList[i])
+			a.log.Debug("AddCheckboxItem suc: ", res.Success)
+			if !res.Success {
+				suc = false
+			}
+		}
+		a.retryCall = false
+		if suc {
+			a.FailAddCheckboxNoteItemList = a.FailAddCheckboxNoteItemList[:0]
+			a.log.Debug("FailAddCheckboxNoteItemList size after clear : ", len(a.FailAddCheckboxNoteItemList))
+		}
+	}
+
+	if len(a.FailUpdateCheckboxNoteItemList) > 0 {
+		var suc = true
+		a.retryCall = true
+		for i := range a.FailUpdateCheckboxNoteItemList {
+			res := a.UpdateCheckboxItem(&a.FailUpdateCheckboxNoteItemList[i])
+			a.log.Debug("UpdateCheckboxItem suc: ", res.Success)
+			if !res.Success {
+				suc = false
+			}
+		}
+		a.retryCall = false
+		if suc {
+			a.FailUpdateCheckboxNoteItemList = a.FailUpdateCheckboxNoteItemList[:0]
+			a.log.Debug("FailUpdateCheckboxNoteItemList size after clear : ", len(a.FailUpdateCheckboxNoteItemList))
+		}
+	}
+
+	if len(a.FailAddNoteItemList) > 0 {
+		var suc = true
+		a.retryCall = true
+		for i := range a.FailAddNoteItemList {
+			res := a.AddNoteItem(&a.FailAddNoteItemList[i])
+			a.log.Debug("AddNoteItem suc: ", res.Success)
+			if !res.Success {
+				suc = false
+			}
+		}
+		a.retryCall = false
+		if suc {
+			a.FailAddNoteItemList = a.FailAddNoteItemList[:0]
+			a.log.Debug("FailAddNoteItemList size after clear : ", len(a.FailAddNoteItemList))
+		}
+	}
+
+	if len(a.FailUpdateNoteItemList) > 0 {
+		var suc = true
+		a.retryCall = true
+		for i := range a.FailUpdateNoteItemList {
+			res := a.UpdateNoteItem(&a.FailUpdateNoteItemList[i])
+			a.log.Debug("UpdateNoteItem suc: ", res.Success)
+			if !res.Success {
+				suc = false
+			}
+		}
+		a.retryCall = false
+		if suc {
+			a.FailUpdateNoteItemList = a.FailUpdateNoteItemList[:0]
+			a.log.Debug("FailUpdateNoteItemList size after clear : ", len(a.FailUpdateNoteItemList))
+		}
+	}
+
 }
