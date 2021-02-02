@@ -254,7 +254,7 @@ func TestNotesAPI_setSavedTextItem(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteTextItems = cbilst
 	n1.Title = "cb note 1"
 	n1.Type = "checkbox"
 	ntlst = append(ntlst, n1)
@@ -268,9 +268,9 @@ func TestNotesAPI_setSavedTextItem(t *testing.T) {
 
 	api.setSavedTextItem(&cbi3)
 
-	ilst := sapi.noteList[0].NoteItems.([]NoteItem)
+	//ilst := sapi.noteList[0].NoteItems.([]NoteItem)
 
-	if len(ilst) != 3 {
+	if len(sapi.noteList[0].NoteTextItems) != 3 {
 		t.Fail()
 	}
 
@@ -306,7 +306,7 @@ func TestNotesAPI_setSavedTextItem2(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteTextItems = cbilst
 	n1.Title = "cb note 1"
 	n1.Type = "checkbox"
 	ntlst = append(ntlst, n1)
@@ -321,9 +321,9 @@ func TestNotesAPI_setSavedTextItem2(t *testing.T) {
 
 	api.setSavedTextItem(&cbi3)
 
-	ilst := sapi.noteList[0].NoteItems.([]NoteItem)
+	//ilst := sapi.noteList[0].NoteItems.([]NoteItem)
 
-	if len(ilst) != 2 {
+	if len(sapi.noteList[0].NoteTextItems) != 2 {
 		t.Fail()
 	}
 

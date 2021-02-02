@@ -95,17 +95,17 @@ func (a *NotesAPI) setSavedTextItem(cbi *NoteItem) {
 			a.log.Debug("saving in updating in for loop: ", a.noteList[i])
 			if a.noteList[i].ID == cbi.NoteID {
 				a.log.Debug("found text and updating: ", a.noteList[i])
-				ilst := a.noteList[i].NoteItems.([]NoteItem)
-				for ii := range ilst {
-					a.log.Debug("found cb item: ", ilst[ii])
-					if ilst[ii].ID == cbi.ID {
-						a.log.Debug("found cb item and updating: ", ilst[ii])
+				//ilst := a.noteList[i].NoteItems.([]NoteItem)
+				for ii := range a.noteList[i].NoteTextItems {
+					a.log.Debug("found cb item: ", a.noteList[i].NoteTextItems[ii])
+					if a.noteList[i].NoteTextItems[ii].ID == cbi.ID {
+						a.log.Debug("found cb item and updating: ", a.noteList[i].NoteTextItems[ii])
 						a.log.Debug("updating to: ", *cbi)
-						ilst[ii].Text = cbi.Text
+						a.noteList[i].NoteTextItems[ii].Text = cbi.Text
 						break
 					}
 				}
-				a.noteList[i].NoteItems = ilst
+				//a.noteList[i].NoteItems = ilst
 				break
 			}
 		}
@@ -117,10 +117,10 @@ func (a *NotesAPI) setSavedTextItem(cbi *NoteItem) {
 		for i := range a.noteList {
 			if a.noteList[i].ID == cbi.NoteID {
 				a.log.Debug("adding new text item: ", *cbi)
-				ilst := a.noteList[i].NoteItems.([]NoteItem)
-				a.log.Debug("existing cb item: ", ilst)
-				ilst = append(ilst, *cbi)
-				a.noteList[i].NoteItems = ilst
+				//ilst := a.noteList[i].NoteItems.([]NoteItem)
+				a.log.Debug("existing cb items: ", a.noteList[i].NoteTextItems)
+				a.noteList[i].NoteTextItems = append(a.noteList[i].NoteTextItems, *cbi)
+				//a.noteList[i].NoteItems = ilst
 				break
 			}
 		}

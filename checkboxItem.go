@@ -96,18 +96,16 @@ func (a *NotesAPI) setSavedCheckboxItem(cbi *CheckboxNoteItem) {
 			a.log.Debug("saving in updating in for loop: ", a.noteList[i])
 			if a.noteList[i].ID == cbi.NoteID {
 				a.log.Debug("found cb and updating: ", a.noteList[i])
-				ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
-				for ii := range ilst {
-					a.log.Debug("found cb item: ", ilst[ii])
-					if ilst[ii].ID == cbi.ID {
-						a.log.Debug("found cb item and updating: ", ilst[ii])
+				for ii := range a.noteList[i].NoteCheckboxItems {
+					a.log.Debug("found cb item: ", a.noteList[i].NoteCheckboxItems[ii])
+					if a.noteList[i].NoteCheckboxItems[ii].ID == cbi.ID {
+						a.log.Debug("found cb item and updating: ", a.noteList[i].NoteCheckboxItems[ii])
 						a.log.Debug("updating to: ", *cbi)
-						ilst[ii].Checked = cbi.Checked
-						ilst[ii].Text = cbi.Text
+						a.noteList[i].NoteCheckboxItems[ii].Checked = cbi.Checked
+						a.noteList[i].NoteCheckboxItems[ii].Text = cbi.Text
 						break
 					}
 				}
-				a.noteList[i].NoteItems = ilst
 				break
 			}
 		}
@@ -119,10 +117,10 @@ func (a *NotesAPI) setSavedCheckboxItem(cbi *CheckboxNoteItem) {
 		for i := range a.noteList {
 			if a.noteList[i].ID == cbi.NoteID {
 				a.log.Debug("adding new cb item: ", *cbi)
-				ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
-				a.log.Debug("existing cb item: ", ilst)
-				ilst = append(ilst, *cbi)
-				a.noteList[i].NoteItems = ilst
+				//ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
+				//a.log.Debug("existing cb item: ", ilst)
+				a.noteList[i].NoteCheckboxItems = append(a.noteList[i].NoteCheckboxItems, *cbi)
+				//a.noteList[i].NoteItems = ilst
 				break
 			}
 		}

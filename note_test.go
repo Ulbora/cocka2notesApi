@@ -650,7 +650,7 @@ func TestNotesAPI_setSavedCheckboxNote(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteCheckboxItems = cbilst
 	n1.Title = "cb note 1"
 	n1.Type = "checkbox"
 	ntlst = append(ntlst, n1)
@@ -700,7 +700,7 @@ func TestNotesAPI_getSavedCheckboxNote(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteCheckboxItems = cbilst
 	n1.Title = "cb note 1"
 	n1.Type = "checkbox"
 	ntlst = append(ntlst, n1)
@@ -745,7 +745,7 @@ func TestNotesAPI_setSavedTextNote(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteTextItems = cbilst
 	n1.Title = "cb note 1"
 	n1.Type = "checkbox"
 	ntlst = append(ntlst, n1)
@@ -756,9 +756,9 @@ func TestNotesAPI_setSavedTextNote(t *testing.T) {
 
 	api.setSavedTextNote(&cb)
 
-	ilst := sapi.noteList[0].NoteItems.([]NoteItem)
-	fmt.Println("text note list: ", ilst[0])
-	if len(ilst) != 2 {
+	//ilst := sapi.noteList[0].NoteTextItems.([]NoteItem)
+	fmt.Println("text note list: ", sapi.noteList[0].NoteTextItems[0])
+	if len(sapi.noteList[0].NoteTextItems) != 2 {
 		t.Fail()
 	}
 
@@ -794,7 +794,7 @@ func TestNotesAPI_getSavedTextNote(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteTextItems = cbilst
 	n1.Title = "text note 1"
 	n1.Type = "note"
 	ntlst = append(ntlst, n1)
@@ -838,7 +838,7 @@ func TestNotesAPI_SetNoteList(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteTextItems = cbilst
 	n1.Title = "text note 1"
 	n1.Type = "note"
 	ntlst = append(ntlst, n1)

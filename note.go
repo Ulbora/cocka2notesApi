@@ -167,32 +167,33 @@ func (a *NotesAPI) getSavedCheckboxNote(id int64) *CheckboxNote {
 			cbn.OwnerEmail = a.noteList[i].OwnerEmail
 			cbn.Title = a.noteList[i].Title
 			cbn.Type = a.noteList[i].Type
-			var ilst []CheckboxNoteItem
-			if rec, ok := a.noteList[i].NoteItems.([]map[string]interface{}); ok {
-				for _, r := range rec {
-					var ci CheckboxNoteItem
-					for key, val := range r {
-						if key == "id" {
-							ci.ID = val.(int64)
-						} else if key == "noteId" {
-							ci.NoteID = val.(int64)
-						} else if key == "checked" {
-							ci.Checked = val.(bool)
-						} else if key == "text" {
-							ci.Text = val.(string)
-						}
-						a.log.Debug("key: ", key)
-						a.log.Debug("val: ", val)
-					}
-					ilst = append(ilst, ci)
-				}
-				cbn.NoteItems = ilst
-			} else {
-				ilst = a.noteList[i].NoteItems.([]CheckboxNoteItem)
-				cbn.NoteItems = ilst
-				//fmt.Printf("record not a map[string]interface{}: %v\n", record)
-			}
-			//ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
+			cbn.NoteItems = a.noteList[i].NoteCheckboxItems
+			// var ilst []CheckboxNoteItem
+			// if rec, ok := a.noteList[i].NoteItems.([]map[string]interface{}); ok {
+			// 	for _, r := range rec {
+			// 		var ci CheckboxNoteItem
+			// 		for key, val := range r {
+			// 			if key == "id" {
+			// 				ci.ID = val.(int64)
+			// 			} else if key == "noteId" {
+			// 				ci.NoteID = val.(int64)
+			// 			} else if key == "checked" {
+			// 				ci.Checked = val.(bool)
+			// 			} else if key == "text" {
+			// 				ci.Text = val.(string)
+			// 			}
+			// 			a.log.Debug("key: ", key)
+			// 			a.log.Debug("val: ", val)
+			// 		}
+			// 		ilst = append(ilst, ci)
+			// 	}
+			// 	cbn.NoteItems = ilst
+			// } else {
+			// 	ilst = a.noteList[i].NoteItems.([]CheckboxNoteItem)
+			// 	cbn.NoteItems = ilst
+			// 	//fmt.Printf("record not a map[string]interface{}: %v\n", record)
+			// }
+			// //ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
 
 			break
 		}
@@ -205,6 +206,7 @@ func (a *NotesAPI) setSavedTextNote(tn *TextNote) {
 		if a.noteList[i].ID == tn.ID {
 			a.log.Debug("found : ", a.noteList[i])
 			a.noteList[i].Title = tn.Title
+			a.noteList[i].NoteTextItems = tn.NoteItems
 			a.log.Debug("updated : ", a.noteList[i])
 			break
 		}
@@ -221,10 +223,7 @@ func (a *NotesAPI) getSavedTextNote(id int64) *TextNote {
 			txn.OwnerEmail = a.noteList[i].OwnerEmail
 			txn.Title = a.noteList[i].Title
 			txn.Type = a.noteList[i].Type
-			ilst := a.noteList[i].NoteItems.([]NoteItem)
-			for _, ti := range ilst {
-				txn.NoteItems = append(txn.NoteItems, ti)
-			}
+			txn.NoteItems = a.noteList[i].NoteTextItems
 			break
 		}
 	}

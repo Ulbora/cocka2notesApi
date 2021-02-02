@@ -259,7 +259,7 @@ func TestNotesAPI_setSavedCheckboxItem(t *testing.T) {
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteCheckboxItems = cbilst
 	n1.Title = "cb note 1"
 	n1.Type = "checkbox"
 	ntlst = append(ntlst, n1)
@@ -274,9 +274,9 @@ func TestNotesAPI_setSavedCheckboxItem(t *testing.T) {
 
 	api.setSavedCheckboxItem(&cbi3)
 
-	ilst := sapi.noteList[0].NoteItems.([]CheckboxNoteItem)
+	//ilst := sapi.noteList[0].NoteItems.([]CheckboxNoteItem)
 
-	if len(ilst) != 3 {
+	if len(sapi.noteList[0].NoteCheckboxItems) != 3 {
 		t.Fail()
 	}
 
@@ -309,13 +309,12 @@ func TestNotesAPI_setSavedCheckboxItem2(t *testing.T) {
 	cb.Type = "checkbox"
 	api := sapi.GetNew()
 
-
 	var ntlst []Note
 	var n1 Note
 	n1.ID = 5
 	n1.LastUsed = time.Now()
 	n1.OwnerEmail = "tester@tst.com"
-	n1.NoteItems = cbilst
+	n1.NoteCheckboxItems = cbilst
 	n1.Title = "cb note 1"
 	n1.Type = "checkbox"
 	ntlst = append(ntlst, n1)
@@ -331,9 +330,9 @@ func TestNotesAPI_setSavedCheckboxItem2(t *testing.T) {
 
 	api.setSavedCheckboxItem(&cbi3)
 
-	ilst := sapi.noteList[0].NoteItems.([]CheckboxNoteItem)
+	//ilst := sapi.noteList[0].NoteCheckboxItems.([]CheckboxNoteItem)
 
-	if len(ilst) != 2 {
+	if len(sapi.noteList[0].NoteCheckboxItems) != 2 {
 		t.Fail()
 	}
 
