@@ -92,7 +92,7 @@ type TextNote struct {
 	Title      string     `json:"title"`
 	Type       string     `json:"type"`
 	OwnerEmail string     `json:"ownerEmail"`
-	NoteItems  []NoteItem `json:"noteItems"`
+	NoteItems  []NoteItem `json:"noteTextItems"`
 	LastUsed   time.Time  `json:"lastUsed"`
 }
 
@@ -120,7 +120,7 @@ type CheckboxNote struct {
 	Title      string             `json:"title"`
 	Type       string             `json:"type"`
 	OwnerEmail string             `json:"ownerEmail"`
-	NoteItems  []CheckboxNoteItem `json:"noteItems"`
+	NoteItems  []CheckboxNoteItem `json:"noteCheckboxItems"`
 	LastUsed   time.Time          `json:"lastUsed"`
 }
 
