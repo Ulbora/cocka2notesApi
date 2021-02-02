@@ -167,10 +167,33 @@ func (a *NotesAPI) getSavedCheckboxNote(id int64) *CheckboxNote {
 			cbn.OwnerEmail = a.noteList[i].OwnerEmail
 			cbn.Title = a.noteList[i].Title
 			cbn.Type = a.noteList[i].Type
-			ilst := a.noteList[i].NoteItems.([]interface{})
-			for _, ci := range ilst {
-				cbn.NoteItems = append(cbn.NoteItems, ci.(CheckboxNoteItem))
+			var ilst []CheckboxNoteItem
+			if rec, ok := a.noteList[i].NoteItems.([]map[string]interface{}); ok {
+				for _, r := range rec {
+					var ci CheckboxNoteItem
+					for key, val := range r {
+						if key == "id" {
+							ci.ID = val.(int64)
+						} else if key == "noteId" {
+							ci.NoteID = val.(int64)
+						} else if key == "checked" {
+							ci.Checked = val.(bool)
+						} else if key == "text" {
+							ci.Text = val.(string)
+						}
+						a.log.Debug("key: ", key)
+						a.log.Debug("val: ", val)
+					}
+					ilst = append(ilst, ci)
+				}
+				cbn.NoteItems = ilst
+			} else {
+				ilst = a.noteList[i].NoteItems.([]CheckboxNoteItem)
+				cbn.NoteItems = ilst
+				//fmt.Printf("record not a map[string]interface{}: %v\n", record)
 			}
+			//ilst := a.noteList[i].NoteItems.([]CheckboxNoteItem)
+
 			break
 		}
 	}

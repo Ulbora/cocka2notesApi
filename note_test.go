@@ -670,8 +670,8 @@ func TestNotesAPI_setSavedCheckboxNote(t *testing.T) {
 func TestNotesAPI_getSavedCheckboxNote(t *testing.T) {
 	var sapi NotesAPI
 
-	// var cbilst []CheckboxNoteItem
-	var cbilst []interface{}
+	var cbilst []CheckboxNoteItem
+	//var cbilst []interface{}
 	var cbi1 CheckboxNoteItem
 	cbi1.Checked = true
 	cbi1.ID = 1
