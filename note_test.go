@@ -670,7 +670,8 @@ func TestNotesAPI_setSavedCheckboxNote(t *testing.T) {
 func TestNotesAPI_getSavedCheckboxNote(t *testing.T) {
 	var sapi NotesAPI
 
-	var cbilst []CheckboxNoteItem
+	// var cbilst []CheckboxNoteItem
+	var cbilst []interface{}
 	var cbi1 CheckboxNoteItem
 	cbi1.Checked = true
 	cbi1.ID = 1
@@ -685,13 +686,13 @@ func TestNotesAPI_getSavedCheckboxNote(t *testing.T) {
 	cbi2.Text = "milk"
 	cbilst = append(cbilst, cbi2)
 
-	var cb CheckboxNote
-	cb.ID = 5
-	cb.LastUsed = time.Now()
-	cb.OwnerEmail = "tester@tst.com"
-	cb.NoteItems = cbilst
-	cb.Title = "cb note 1"
-	cb.Type = "checkbox"
+	// var cb CheckboxNote
+	// cb.ID = 5
+	// cb.LastUsed = time.Now()
+	// cb.OwnerEmail = "tester@tst.com"
+	// cb.NoteItems = cbilst
+	// cb.Title = "cb note 1"
+	// cb.Type = "checkbox"
 	api := sapi.GetNew()
 
 	var ntlst []Note

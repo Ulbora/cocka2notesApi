@@ -1,7 +1,4 @@
 mode: set
-github.com/Ulbora/cocka2notesApi/api.go:66.49,69.22 3 1
-github.com/Ulbora/cocka2notesApi/api.go:72.2,72.24 1 1
-github.com/Ulbora/cocka2notesApi/api.go:69.22,71.3 1 1
 github.com/Ulbora/cocka2notesApi/checkboxItem.go:32.70,37.16 5 1
 github.com/Ulbora/cocka2notesApi/checkboxItem.go:50.2,51.13 2 1
 github.com/Ulbora/cocka2notesApi/checkboxItem.go:37.16,42.11 5 1
@@ -131,3 +128,6 @@ github.com/Ulbora/cocka2notesApi/user.go:135.53,140.16 5 1
 github.com/Ulbora/cocka2notesApi/user.go:149.2,150.13 2 1
 github.com/Ulbora/cocka2notesApi/user.go:140.16,145.15 5 1
 github.com/Ulbora/cocka2notesApi/user.go:145.15,147.4 1 1
+github.com/Ulbora/cocka2notesApi/api.go:66.49,69.22 3 1
+github.com/Ulbora/cocka2notesApi/api.go:72.2,72.24 1 1
+github.com/Ulbora/cocka2notesApi/api.go:69.22,71.3 1 1
