@@ -66,7 +66,7 @@ func (a *NotesAPI) UpdateCheckboxItem(ni *CheckboxNoteItem) *Response {
 			rtn.Code = int64(stat)
 		}
 		if (!suc || stat != 200) && !a.retryCall {
-			a.FailUpdateCheckboxNoteItemList = append(a.FailAddCheckboxNoteItemList, *ni)
+			a.FailUpdateCheckboxNoteItemList = append(a.FailUpdateCheckboxNoteItemList, *ni)
 			a.setSavedCheckboxItem(ni)
 		}
 	}
