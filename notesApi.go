@@ -129,6 +129,7 @@ func (a *NotesAPI) FlushFailedCache() {
 	}
 
 	if len(a.FailUpdateCheckboxNoteItemList) > 0 {
+		a.log.Debug("FailUpdateCheckboxNoteItemList: ", a.FailUpdateCheckboxNoteItemList)
 		var suc = true
 		a.retryCall = true
 		for i := range a.FailUpdateCheckboxNoteItemList {
@@ -146,6 +147,7 @@ func (a *NotesAPI) FlushFailedCache() {
 	}
 
 	if len(a.FailAddNoteItemList) > 0 {
+		a.log.Debug("FailAddNoteItemList: ", a.FailAddNoteItemList)
 		var suc = true
 		a.retryCall = true
 		for i := range a.FailAddNoteItemList {
@@ -163,6 +165,7 @@ func (a *NotesAPI) FlushFailedCache() {
 	}
 
 	if len(a.FailUpdateNoteItemList) > 0 {
+		a.log.Debug("FailUpdateNoteItemList: ", a.FailUpdateNoteItemList)
 		var suc = true
 		a.retryCall = true
 		for i := range a.FailUpdateNoteItemList {
