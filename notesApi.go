@@ -24,6 +24,7 @@ package cocka2notesapi
 import (
 	"bytes"
 	"net/http"
+	"sync"
 
 	px "github.com/Ulbora/GoProxy"
 	lg "github.com/Ulbora/Level_Logger"
@@ -114,13 +115,20 @@ func (a *NotesAPI) FlushFailedCache() {
 		a.log.Debug("FailAddCheckboxNoteItemList: ", a.FailAddCheckboxNoteItemList)
 		var suc = true
 		a.retryCall = true
+		var wg sync.WaitGroup
 		for i := range a.FailAddCheckboxNoteItemList {
-			res := a.AddCheckboxItem(&a.FailAddCheckboxNoteItemList[i])
-			a.log.Debug("AddCheckboxItem suc: ", res.Success)
-			if !res.Success {
-				suc = false
-			}
+			wg.Add(1)
+			go func(cb CheckboxNoteItem) {
+				defer wg.Done()
+				res := a.AddCheckboxItem(&cb)
+				a.log.Debug("AddCheckboxItem suc: ", res.Success)
+				if !res.Success {
+					suc = false
+				}
+			}(a.FailAddCheckboxNoteItemList[i])
 		}
+		a.log.Debug("waiting for go routines in add checkitem")
+		wg.Wait()
 		a.retryCall = false
 		if suc {
 			a.FailAddCheckboxNoteItemList = a.FailAddCheckboxNoteItemList[:0]
@@ -132,13 +140,20 @@ func (a *NotesAPI) FlushFailedCache() {
 		a.log.Debug("FailUpdateCheckboxNoteItemList: ", a.FailUpdateCheckboxNoteItemList)
 		var suc = true
 		a.retryCall = true
+		var wg sync.WaitGroup
 		for i := range a.FailUpdateCheckboxNoteItemList {
-			res := a.UpdateCheckboxItem(&a.FailUpdateCheckboxNoteItemList[i])
-			a.log.Debug("UpdateCheckboxItem suc: ", res.Success)
-			if !res.Success {
-				suc = false
-			}
+			wg.Add(1)
+			go func(cb CheckboxNoteItem) {
+				defer wg.Done()
+				res := a.UpdateCheckboxItem(&cb)
+				a.log.Debug("UpdateCheckboxItem suc: ", res.Success)
+				if !res.Success {
+					suc = false
+				}
+			}(a.FailUpdateCheckboxNoteItemList[i])
 		}
+		a.log.Debug("waiting for go routines in update checkitem")
+		wg.Wait()
 		a.retryCall = false
 		if suc {
 			a.FailUpdateCheckboxNoteItemList = a.FailUpdateCheckboxNoteItemList[:0]
@@ -150,13 +165,20 @@ func (a *NotesAPI) FlushFailedCache() {
 		a.log.Debug("FailAddNoteItemList: ", a.FailAddNoteItemList)
 		var suc = true
 		a.retryCall = true
+		var wg sync.WaitGroup
 		for i := range a.FailAddNoteItemList {
-			res := a.AddNoteItem(&a.FailAddNoteItemList[i])
-			a.log.Debug("AddNoteItem suc: ", res.Success)
-			if !res.Success {
-				suc = false
-			}
+			wg.Add(1)
+			go func(ni NoteItem) {
+				defer wg.Done()
+				res := a.AddNoteItem(&ni)
+				a.log.Debug("AddNoteItem suc: ", res.Success)
+				if !res.Success {
+					suc = false
+				}
+			}(a.FailAddNoteItemList[i])
 		}
+		a.log.Debug("waiting for go routines in add item")
+		wg.Wait()
 		a.retryCall = false
 		if suc {
 			a.FailAddNoteItemList = a.FailAddNoteItemList[:0]
@@ -168,13 +190,20 @@ func (a *NotesAPI) FlushFailedCache() {
 		a.log.Debug("FailUpdateNoteItemList: ", a.FailUpdateNoteItemList)
 		var suc = true
 		a.retryCall = true
+		var wg sync.WaitGroup
 		for i := range a.FailUpdateNoteItemList {
-			res := a.UpdateNoteItem(&a.FailUpdateNoteItemList[i])
-			a.log.Debug("UpdateNoteItem suc: ", res.Success)
-			if !res.Success {
-				suc = false
-			}
+			wg.Add(1)
+			go func(ni NoteItem) {
+				defer wg.Done()
+				res := a.UpdateNoteItem(&ni)
+				a.log.Debug("UpdateNoteItem suc: ", res.Success)
+				if !res.Success {
+					suc = false
+				}
+			}(a.FailUpdateNoteItemList[i])
 		}
+		a.log.Debug("waiting for go routines in update item")
+		wg.Wait()
 		a.retryCall = false
 		if suc {
 			a.FailUpdateNoteItemList = a.FailUpdateNoteItemList[:0]
